@@ -286,3 +286,11 @@ std::any MyVisitor::visitBlock(lolParser::BlockContext *ctx) {
     variables.decDepth();
     return res;
 }
+std::any MyVisitor::visitWhile(lolParser::WhileContext *ctx) {
+    size_t i = 0;
+    while(!(!visit(ctx->expr()))) {
+        visit(ctx->block());
+        i++;
+    }
+    return i++;
+}

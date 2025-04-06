@@ -58,10 +58,10 @@ type
     ;
 
 loop
-    : for
+    : while
     ;
 
-for: 'доколе' assignment123? ',' expr ',' expr block ;
+while: 'доколе' expr block ;
 
 print: 'воспевай' expr ;
 

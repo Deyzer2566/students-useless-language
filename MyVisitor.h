@@ -35,6 +35,8 @@ public:
     std::any visitPrint(lolParser::PrintContext *ctx);
 
     std::any visitIf(lolParser::IfContext *ctx);
+
+    std::any visitWhile(lolParser::WhileContext *ctx);
 protected:
     MyTreeMap<std::string, std::any> variables;
 };
