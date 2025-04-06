@@ -194,7 +194,16 @@ std::any MyVisitor::visitCompare(lolParser::CompareContext *ctx) {
         return visit(ctx->expr(0)) < visit(ctx->expr(1));
 }
 std::any MyVisitor::visitIdent(lolParser::IdentContext *ctx) {
-    return variables.at(ctx->IDENT()->getText());
+    try{
+        return variables.at(ctx->IDENT()->getText());   
+    } catch (std::out_of_range except) {
+        throw std::logic_error("invalid name of variable \""
+                                +ctx->IDENT()->getText()
+                                +"\" at line "
+                                +std::to_string(ctx->getStart()->getLine())
+                                +":"
+                                +std::to_string(ctx->getStart()->getCharPositionInLine()));
+    }
 }
 std::any MyVisitor::visitInteger_val(lolParser::Integer_valContext *ctx) {
     return std::stoi(ctx->INTEGER()->getText());
@@ -270,4 +279,10 @@ std::any MyVisitor::visitIf(lolParser::IfContext *ctx) {
         visit(ctx->block(1));
     }
     return (int)(!(!expr));
+}
+std::any MyVisitor::visitBlock(lolParser::BlockContext *ctx) {
+    variables.incDepth();
+    std::any res = visitChildren(ctx);
+    variables.decDepth();
+    return res;
 }

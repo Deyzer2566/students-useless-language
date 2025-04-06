@@ -2,7 +2,8 @@
 C_FILES = \
 	main.cpp \
 	MyVisitor.cpp \
-	MyVisitor.h
+	MyVisitor.h \
+	MyTreeMap.h
 GENERATED_FILES = \
 	lolBaseVisitor.cpp \
 	lolBaseVisitor.h \

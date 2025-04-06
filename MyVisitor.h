@@ -1,4 +1,6 @@
+#pragma once
 #include "lolBaseVisitor.h"
+#include "MyTreeMap.h"
 
 class invalid_operand : public std::exception {
 public:
@@ -16,7 +18,7 @@ public:
 
 class  MyVisitor : public lolBaseVisitor {
 public:
-    // std::any visitStmt(lolParser::StmtContext *ctx);
+    std::any visitBlock(lolParser::BlockContext *ctx);
     std::any visitParenthesis(lolParser::ParenthesisContext *ctx);
     std::any visitCast(lolParser::CastContext *ctx);
     std::any visitMul_div(lolParser::Mul_divContext *ctx);
@@ -34,5 +36,5 @@ public:
 
     std::any visitIf(lolParser::IfContext *ctx);
 protected:
-    std::map<std::string, std::any> variables;
+    MyTreeMap<std::string, std::any> variables;
 };
