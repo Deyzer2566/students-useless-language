@@ -4,7 +4,7 @@
 
 using namespace std;
 
-// std::any MyVisitor::visitStmt(lolParser::StmtContext *ctx) {
+// std::any MyVisitor::visitStmt(sulParser::StmtContext *ctx) {
 //     // cout<<"exit stmt"<<" "<<ctx->getRuleIndex()<<" "<<ctx->getText()<<" "<<ctx->expr()<<" "<<ctx->if_()<<endl;
 //     if(ctx->expr() != nullptr) {
 //         // ctx->expr()->ex
@@ -51,7 +51,7 @@ std::pair<T, T> toOneType(std::any first, std::any second) {
     return std::make_pair(std::any_cast<T>(first), std::any_cast<T>(second));
 }
 
-std::any MyVisitor::visitCast(lolParser::CastContext *ctx) {
+std::any MyVisitor::visitCast(sulParser::CastContext *ctx) {
     std::any value = visit(ctx->expr());
     std::string cast_type = ctx->type()->getText();
     if(value.type() == typeid(int)) {
@@ -171,21 +171,21 @@ const map<std::string, std::function<std::any(std::any, std::any)>> operations =
     {">", [](std::any f, std::any s){return f>s;}},
     {"<", [](std::any f, std::any s){return f<s;}}
 };
-std::any MyVisitor::visitMul_div(lolParser::Mul_divContext *ctx) {
+std::any MyVisitor::visitMul_div(sulParser::Mul_divContext *ctx) {
     if(ctx->operation->getText() == "*") {
         return visit(ctx->expr(0)) * visit(ctx->expr(1));
     } else {
         return visit(ctx->expr(0)) / visit(ctx->expr(1));
     }
 }
-std::any MyVisitor::visitSum_sub(lolParser::Sum_subContext *ctx) {
+std::any MyVisitor::visitSum_sub(sulParser::Sum_subContext *ctx) {
     if(ctx->operation->getText() == "+") {
         return visit(ctx->expr(0)) + visit(ctx->expr(1));
     } else {
         return visit(ctx->expr(0)) - visit(ctx->expr(1));
     }
 }
-std::any MyVisitor::visitCompare(lolParser::CompareContext *ctx) {
+std::any MyVisitor::visitCompare(sulParser::CompareContext *ctx) {
     if(ctx->operation->getText() == "==") {
         return visit(ctx->expr(0)) == visit(ctx->expr(1));
     } else if(ctx->operation->getText() == ">"){
@@ -193,7 +193,7 @@ std::any MyVisitor::visitCompare(lolParser::CompareContext *ctx) {
     } else 
         return visit(ctx->expr(0)) < visit(ctx->expr(1));
 }
-std::any MyVisitor::visitIdent(lolParser::IdentContext *ctx) {
+std::any MyVisitor::visitIdent(sulParser::IdentContext *ctx) {
     try{
         return variables.at(ctx->IDENT()->getText());   
     } catch (std::out_of_range except) {
@@ -205,13 +205,13 @@ std::any MyVisitor::visitIdent(lolParser::IdentContext *ctx) {
                                 +std::to_string(ctx->getStart()->getCharPositionInLine()));
     }
 }
-std::any MyVisitor::visitInteger_val(lolParser::Integer_valContext *ctx) {
+std::any MyVisitor::visitInteger_val(sulParser::Integer_valContext *ctx) {
     return std::stoi(ctx->INTEGER()->getText());
 }
-std::any MyVisitor::visitReal_val(lolParser::Real_valContext *ctx) {
+std::any MyVisitor::visitReal_val(sulParser::Real_valContext *ctx) {
     return std::stod(ctx->REAL()->getText());
 }
-std::any MyVisitor::visitString_val(lolParser::String_valContext *ctx) {
+std::any MyVisitor::visitString_val(sulParser::String_valContext *ctx) {
     std::string str_val = ctx->STRING()->getText();
     str_val = str_val.substr(1,str_val.size()-2);
     for(size_t i = 0; i < str_val.size()-1; i++) {
@@ -230,11 +230,11 @@ std::any MyVisitor::visitString_val(lolParser::String_valContext *ctx) {
     }
     return str_val;
 }
-std::any MyVisitor::visitAssignment(lolParser::AssignmentContext *ctx) {
+std::any MyVisitor::visitAssignment(sulParser::AssignmentContext *ctx) {
     variables[ctx->assignment123()->IDENT()->getText()] = visit(ctx->assignment123()->expr());
     return variables[ctx->assignment123()->IDENT()->getText()];
 }
-std::any MyVisitor::visitPrint(lolParser::PrintContext *ctx) {
+std::any MyVisitor::visitPrint(sulParser::PrintContext *ctx) {
     std::any expr = visit(ctx->expr());
     if(expr.type() == typeid(int)) {
         std::cout<<std::any_cast<int>(expr);
@@ -246,10 +246,10 @@ std::any MyVisitor::visitPrint(lolParser::PrintContext *ctx) {
     }
     return expr;
 }
-std::any MyVisitor::visitParenthesis(lolParser::ParenthesisContext *ctx) {
+std::any MyVisitor::visitParenthesis(sulParser::ParenthesisContext *ctx) {
     return visit(ctx->expr());
 }
-std::any MyVisitor::visitNegation(lolParser::NegationContext *ctx) {
+std::any MyVisitor::visitNegation(sulParser::NegationContext *ctx) {
     std::any value = visit(ctx->expr());
     if(value.type() == typeid(int)) {
         return -std::any_cast<int>(value);
@@ -268,10 +268,10 @@ int operator!(std::any value) {
     }
     throw invalid_operand();
 }
-std::any MyVisitor::visitLogical_inversion(lolParser::Logical_inversionContext *ctx) {
+std::any MyVisitor::visitLogical_inversion(sulParser::Logical_inversionContext *ctx) {
     return !visit(ctx->expr());
 }
-std::any MyVisitor::visitIf(lolParser::IfContext *ctx) {
+std::any MyVisitor::visitIf(sulParser::IfContext *ctx) {
     std::any expr = visit(ctx->expr());
     if(!(!expr)) {
         visit(ctx->block(0));
@@ -280,13 +280,13 @@ std::any MyVisitor::visitIf(lolParser::IfContext *ctx) {
     }
     return (int)(!(!expr));
 }
-std::any MyVisitor::visitBlock(lolParser::BlockContext *ctx) {
+std::any MyVisitor::visitBlock(sulParser::BlockContext *ctx) {
     variables.incDepth();
     std::any res = visitChildren(ctx);
     variables.decDepth();
     return res;
 }
-std::any MyVisitor::visitWhile(lolParser::WhileContext *ctx) {
+std::any MyVisitor::visitWhile(sulParser::WhileContext *ctx) {
     size_t i = 0;
     while(!(!visit(ctx->expr()))) {
         visit(ctx->block());

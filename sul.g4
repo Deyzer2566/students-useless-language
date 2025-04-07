@@ -1,8 +1,9 @@
-grammar lol;
+grammar sul;
 
 @header {
 /*
- * this program created by the main sigma on the world
+ * Студенческий бесполезный язык 2025
+ * Student's useless language 2025
  */
 }
 

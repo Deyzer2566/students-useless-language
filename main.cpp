@@ -1,8 +1,8 @@
 #include <iostream>
 
 #include "antlr4-runtime.h"
-#include "lolLexer.h"
-#include "lolParser.h"
+#include "sulLexer.h"
+#include "sulParser.h"
 #include "MyVisitor.h"
 
 using namespace antlr4;
@@ -12,9 +12,9 @@ int main(int argc, const char* argv[]) {
   std::ifstream stream;
   stream.open(argv[1]);
   ANTLRInputStream input(stream);
-  lolLexer lexer(&input);
+  sulLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
-  lolParser parser(&tokens);
+  sulParser parser(&tokens);
 
   tree::ParseTree *tree = parser.program();
   MyVisitor visitor;
