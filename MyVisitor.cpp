@@ -3,15 +3,6 @@
 #include <functional>
 
 using namespace std;
-
-// std::any MyVisitor::visitStmt(sulParser::StmtContext *ctx) {
-//     // cout<<"exit stmt"<<" "<<ctx->getRuleIndex()<<" "<<ctx->getText()<<" "<<ctx->expr()<<" "<<ctx->if_()<<endl;
-//     if(ctx->expr() != nullptr) {
-//         // ctx->expr()->ex
-//     }
-//     return 0;
-// }
-
 template <typename T>
 std::pair<T, T> toOneType(std::any first, std::any second) {
     if(first.type().name() == "string" || second.type().name() == "string") {
